@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
@@ -6,8 +5,7 @@ public class App {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Tarea> tareas = new ArrayList<>();
-
+        GestorTareas gestor = new GestorTareas();
         int opcion = 0;
 
         while (opcion != 6) {
@@ -16,10 +14,11 @@ public class App {
             System.out.println("1. Crear tarea");
             System.out.println("2. Listar tareas");
             System.out.println("3. Completar primera tarea");
-            System.out.println("4. Completar por numero");
+            System.out.println("4. Completar tarea por número");
             System.out.println("5. Eliminar tarea");
             System.out.println("6. Salir");
 
+            System.out.print("Elige una opcion: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
 
@@ -28,57 +27,42 @@ public class App {
                 case 1:
                     System.out.print("Titulo: ");
                     String titulo = scanner.nextLine();
-
-                    Tarea tarea = new Tarea(titulo);
-                    tareas.add(tarea);
-
-                    System.out.println("Guardada!");
+                    gestor.agregarTarea(titulo);
+                    System.out.println("Tarea agregada!");
                     break;
 
                 case 2:
-                    for (int i = 0; i < tareas.size(); i++) {
-                        System.out.println(i + " - " + tareas.get(i).mostrar());
-                    }
+                    gestor.listarTareas();
                     break;
 
                 case 3:
-                    if (!tareas.isEmpty()) {
-                        tareas.get(0).completar();
-                        System.out.println("Primera tarea completada");
+                    if (gestor.cantidadTareas() > 0) {
+                        gestor.completarTarea(0);
+                    } else {
+                        System.out.println("No hay tareas");
                     }
                     break;
 
                 case 4:
-                    if (tareas.isEmpty()) {
-                        System.out.println("No hay tareas");
-                        break;
-                    }
-
-                    System.out.println("Ingrese numero de tarea: ");
-                    int numero = scanner.nextInt();
+                    System.out.print("Ingrese numero de tarea: ");
+                    int num = scanner.nextInt();
                     scanner.nextLine();
-
-                    if (numero >= 0 && numero < tareas.size()) {
-                        tareas.get(numero).completar();
-                        System.out.println("Tarea completada!");
-                    } else {
-                        System.out.println("Numero invalido");
-                    }
+                    gestor.completarTarea(num);
                     break;
-                case 5:
-                    System.out.print("Numero a eliminar: ");
-                    int n = scanner.nextInt();
-                    scanner.nextLine();
 
-                    if (n >= 0 && n < tareas.size()){
-                        tareas.remove(n);
-                        System.out.println("Eliminada!");
-                    }
+                case 5:
+                    System.out.print("Ingrese numero de tarea a eliminar: ");
+                    int elim = scanner.nextInt();
+                    scanner.nextLine();
+                    gestor.eliminarTarea(elim);
                     break;
 
                 case 6:
                     System.out.println("Chau!");
                     break;
+
+                default:
+                    System.out.println("Opcion invalida");
             }
         }
     }
